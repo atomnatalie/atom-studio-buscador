@@ -111,40 +111,41 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA CON MARCO DEGRADADO PERFECTO */
+    /* 5. CAJA DE BÚSQUEDA CON BORDE DEGRADADO FINO Y ELEGANTE */
     .stTextInput > div {
         background: linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
-        border-radius: 30px !important;
-        padding: 3px !important; /* Grosor exacto del borde degradado */
-        box-shadow: 0 4px 18px rgba(255, 102, 0, 0.22), 0 2px 10px rgba(128, 35, 255, 0.2) !important;
+        border-radius: 50px !important;
+        padding: 1.5px !important; /* Grosor fino de la línea */
+        overflow: hidden !important; /* Evita que se corten los bordes laterales */
+        box-shadow: 0 4px 15px rgba(128, 35, 255, 0.12) !important;
         transition: all 0.3s ease !important;
     }
 
     .stTextInput div[data-baseweb="input"],
     .stTextInput div[data-baseweb="base-input"] {
         background-color: #ffffff !important;
-        border-radius: 27px !important;
+        border-radius: 48px !important;
         border: none !important;
         box-shadow: none !important;
         outline: none !important;
+        overflow: hidden !important;
     }
 
-    /* Efecto al hacer clic para escribir */
+    /* Resplandor al hacer foco */
     .stTextInput > div:focus-within {
-        box-shadow: 0 6px 28px rgba(255, 102, 0, 0.35), 0 4px 16px rgba(128, 35, 255, 0.4) !important;
-        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(255, 102, 0, 0.25), 0 2px 10px rgba(128, 35, 255, 0.2) !important;
     }
 
     .stTextInput input {
-        border-radius: 27px !important;
+        border-radius: 48px !important;
         padding: 12px 20px !important;
-        font-size: 16px !important;
+        font-size: 15px !important;
         color: #0f172a !important;
         border: none !important;
         outline: none !important;
         box-shadow: none !important;
         font-family: 'Inter', sans-serif !important;
-        background: transparent !important;
+        background: #ffffff !important;
     }
 
     /* 6. BOTÓN CTA CENTRADO */
