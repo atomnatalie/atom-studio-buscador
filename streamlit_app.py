@@ -4,6 +4,9 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import os
 
+# --- URL DE TU FORMULARIO DE ASANA ---
+URL_FORMULARIO = "https://form.asana.com/?k=X8m1dC_Ob_9orAcwte1MLw&d=1176142409313345"
+
 # --- CONFIGURACIÓN ÚNICA DE PÁGINA Y METADATOS ---
 st.set_page_config(
     page_title="Atom Studio Search",
@@ -140,18 +143,21 @@ st.markdown("""
         font-size: 15px !important;
     }
 
-    /* OCULTAR EL MENSAJE 'PRESS ENTER TO APPLY' */
+    /* OCULTAR EL TEXTO 'PRESS ENTER TO APPLY' Y ELEMENTOS FLOTANTES */
     [data-testid="stInputInstructions"], 
-    .stTextInput small, 
-    div[data-baseweb="input"] + div {
+    [data-baseweb="input"] span,
+    [data-baseweb="input"] div:last-child,
+    .stTextInput small,
+    .stTextInput div[role="button"] {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
-        height: 0 !important;
         width: 0 !important;
+        height: 0 !important;
+        pointer-events: none !important;
     }
 
-    /* 6. BOTÓN CTA CENTRADO */
+    /* 6. BOTÓN CTA PRINCIPAL CENTRADO */
     div.element-container:has(button) {
         display: flex !important;
         justify-content: center !important;
@@ -183,6 +189,37 @@ st.markdown("""
     .stButton > button:hover {
         opacity: 0.92;
         box-shadow: none !important;
+    }
+
+    /* TARJETA CTA PARA RESULTADOS VACÍOS */
+    .request-content-box {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 24px;
+        text-align: center;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+
+    .request-btn {
+        display: inline-block;
+        margin-top: 14px;
+        padding: 10px 22px;
+        background: #ffffff;
+        color: #8023ff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .request-btn:hover {
+        border-color: #8023ff;
+        background: #f5f3ff;
+        color: #8023ff;
     }
 
     /* 7. TARJETAS DE RESULTADOS CON ÍCONOS */
@@ -308,36 +345,6 @@ query_usuario = st.text_input("", placeholder="🔍 Escribe tu búsqueda aquí..
 st.markdown("<br>", unsafe_allow_html=True)
 buscar_clicked = st.button("🔎 Buscar Materiales")
 
-# PIE DE PÁGINA (DENTRO DEL TARJETÓN BLANCO)
-st.markdown("""
-    <div style="
-        margin-top: 35px;
-        padding-top: 18px;
-        border-top: 1px solid rgba(226, 232, 240, 0.8);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-        flex-wrap: wrap;
-    ">
-        <a href="https://atomchat.io" target="_blank" style="display: flex; align-items: center; text-decoration: none;">
-            <img src="https://raw.githubusercontent.com/atomnatalie/atom-studio-buscador/main/logo.png" alt="ATOM Logo" style="height: 24px; width: auto; object-fit: contain;">
-        </a>
-        <div style="height: 16px; width: 1px; background-color: #cbd5e1;"></div>
-        <div style="display: flex; align-items: center; gap: 14px;">
-            <a href="https://www.instagram.com/atom_chat/" target="_blank" style="color: #64748b; text-decoration: none; display: flex; align-items: center;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            <a href="https://www.linkedin.com/company/atomchat/" target="_blank" style="color: #64748b; text-decoration: none; display: flex; align-items: center;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-            </a>
-            <a href="https://www.youtube.com/channel/UCvVlbyMlf5X_h-HvjoC14nA" target="_blank" style="color: #64748b; text-decoration: none; display: flex; align-items: center;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-            </a>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
-
 # LÓGICA Y RESULTADOS
 if buscar_clicked or query_usuario:
     if query_usuario:
@@ -394,15 +401,26 @@ if buscar_clicked or query_usuario:
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 if not archivos:
-                    st.warning("No encontramos archivos que coincidan con esa descripción.")
+                    st.markdown(f"""
+                        <div class="request-content-box">
+                            <p style="color: #0f172a; font-weight: 600; font-size: 16px; margin-bottom: 6px;">
+                                🔍 No encontramos lo que buscas
+                            </p>
+                            <p style="color: #64748b; font-size: 14px; margin-bottom: 0;">
+                                ¿El material aún no existe o necesitas un diseño personalizado?
+                            </p>
+                            <a class="request-btn" href="{URL_FORMULARIO}" target="_blank">
+                                📩 Solicitar nuevo contenido
+                            </a>
+                        </div>
+                    """, unsafe_allow_html=True)
                 else:
-                    # --- REORDENAMIENTO INTELIGENTE EN PYTHON ---
+                    # REORDENAMIENTO INTELIGENTE
                     def calcular_relevancia(item):
                         nombre_item = item.get('name', '').lower().replace('_', ' ')
                         es_carpeta = 1 if 'folder' in item.get('mimeType', '') else 0
                         coincidencias = sum(1 for p in palabras_clave if p.lower() in nombre_item)
-                        puntuacion = (es_carpeta * 10) + coincidencias
-                        return puntuacion
+                        return (es_carpeta * 10) + coincidencias
 
                     archivos_ordenados = sorted(archivos, key=calcular_relevancia, reverse=True)[:15]
 
@@ -412,10 +430,9 @@ if buscar_clicked or query_usuario:
                         mime = archivo.get('mimeType', '')
                         nombre = archivo.get('name', '').lower()
                         
-                        # SVG vectorial para PowerPoint
                         ppt_svg = '''<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="24" height="24" rx="5" fill="#D24726"/>
-                            <path d="M7 6H13.5C15.433 6 17 7.567 17 9.5C17 11.433 15.433 13 13.5 13H10V18H7V6ZM10 8.5V10.5H13.5C14.0523 10.5 14.5 10.0523 14.5 8.5H10Z" fill="white"/>
+                            <path d="M7 6H13.5C15.433 6 17 7.567 17 9.5C17 11.433 15.433 13 13.5 13H10V18H7V6ZM10 8.5V10.5H13.5C14.0523 10.5 14.5 10.0523 14.5 9.5C14.5 8.94772 14.0523 8.5 13.5 8.5H10Z" fill="white"/>
                         </svg>'''
 
                         if 'folder' in mime:
@@ -443,3 +460,37 @@ if buscar_clicked or query_usuario:
                             
             except Exception as e:
                 st.error(f"Error al buscar en Drive: {e}")
+
+# PIE DE PÁGINA CON ENLACE SUTIL A ASANA
+st.markdown(f"""
+    <div style="
+        margin-top: 35px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(226, 232, 240, 0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    ">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+            <a href="https://atomchat.io" target="_blank" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="https://raw.githubusercontent.com/atomnatalie/atom-studio-buscador/main/logo.png" alt="ATOM Logo" style="height: 24px; width: auto; object-fit: contain;">
+            </a>
+            <div style="height: 16px; width: 1px; background-color: #cbd5e1;"></div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <a href="https://www.instagram.com/atom_chat/" target="_blank" style="color: #64748b; text-decoration: none; display: flex; align-items: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/company/atomchat/" target="_blank" style="color: #64748b; text-decoration: none; display: flex; align-items: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="https://www.youtube.com/channel/UCvVlbyMlf5X_h-HvjoC14nA" target="_blank" style="color: #64748b; text-decoration: none; display: flex; align-items: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                </a>
+            </div>
+        </div>
+        <a href="{URL_FORMULARIO}" target="_blank" style="color: #64748b; font-size: 0.8rem; text-decoration: underline; font-weight: 500;">
+            ¿No encuentras lo que buscas? Solicita contenido aquí
+        </a>
+    </div>
+""", unsafe_allow_html=True)
