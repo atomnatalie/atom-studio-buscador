@@ -111,32 +111,35 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA DESTACADA (HIGHLIGHTED) */
+    /* 5. CAJA DE BÚSQUEDA CON BORDE DEGRADE Y RESPLANDOR */
     .stTextInput > div {
-        border-radius: 24px !important;
+        border-radius: 28px !important;
         background: transparent !important;
         box-shadow: none !important;
+        padding: 0 !important;
     }
 
     .stTextInput div[data-baseweb="input"],
     .stTextInput div[data-baseweb="base-input"] {
-        border-radius: 24px !important;
+        border-radius: 28px !important;
         background-color: #ffffff !important;
-        border: 2px solid #ff6600 !important;
-        box-shadow: 0 4px 18px rgba(255, 102, 0, 0.15) !important;
-        outline: none !important;
+        border: 2px solid transparent !important;
+        background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
+        background-origin: border-box !important;
+        background-clip: padding-box, border-box !important;
+        box-shadow: 0 4px 20px rgba(128, 35, 255, 0.12), 0 2px 8px rgba(255, 102, 0, 0.12) !important;
         transition: all 0.3s ease !important;
     }
 
+    /* Efecto al hacer clic para escribir (alumbra más el degradado) */
     .stTextInput div[data-baseweb="input"]:focus-within,
     .stTextInput div[data-baseweb="base-input"]:focus-within {
-        border: 2px solid #8023ff !important;
-        box-shadow: 0 6px 22px rgba(128, 35, 255, 0.25) !important;
-        background-color: #ffffff !important;
+        box-shadow: 0 6px 25px rgba(255, 102, 0, 0.25), 0 2px 12px rgba(128, 35, 255, 0.3) !important;
+        transform: translateY(-1px);
     }
 
     .stTextInput input {
-        border-radius: 24px !important;
+        border-radius: 28px !important;
         padding: 14px 22px !important;
         font-size: 16px !important;
         color: #0f172a !important;
