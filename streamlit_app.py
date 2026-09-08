@@ -124,7 +124,6 @@ st.markdown("""
         padding: 2px 8px !important;
     }
 
-    /* Efecto al hacer clic/escribir: resalta la sombra y el degradado */
     [data-testid="stTextInputRootElement"]:focus-within {
         box-shadow: 0 14px 30px -4px rgba(255, 102, 0, 0.25), 0 6px 18px -2px rgba(128, 35, 255, 0.3) !important;
         transform: translateY(-2px) !important;
@@ -175,30 +174,79 @@ st.markdown("""
         box-shadow: none !important;
     }
 
-    /* 7. TARJETAS DE RESULTADOS */
+    /* 7. TARJETAS DE RESULTADOS CON PREVIEW / THUMBNAIL */
     .asset-card {
-        background: rgba(255, 255, 255, 0.85);
-        border: 1px solid rgba(226, 232, 240, 0.85);
+        background: #ffffff;
+        border: 1px solid rgba(226, 232, 240, 0.9);
         border-radius: 16px;
-        padding: 16px 20px;
+        padding: 14px 18px;
         margin-bottom: 12px;
-        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.02);
+        box-shadow: 0px 4px 12px rgba(15, 23, 42, 0.04);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 16px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .asset-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 8px 20px rgba(128, 35, 255, 0.08);
+    }
+
+    .asset-left-content {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        overflow: hidden;
+    }
+
+    .asset-preview-img {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
+        object-fit: cover;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        flex-shrink: 0;
+    }
+
+    .asset-icon-fallback {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
     }
 
     .asset-title {
         font-weight: 600;
         color: #0f172a;
-        font-size: 15px;
+        font-size: 14.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 420px;
     }
 
     .asset-link {
         color: #8023ff;
         text-decoration: none;
         font-weight: 600;
-        font-size: 14px;
+        font-size: 13.5px;
+        white-space: nowrap;
+        padding: 8px 14px;
+        background: #f5f3ff;
+        border-radius: 10px;
+        transition: background 0.2s ease;
+    }
+
+    .asset-link:hover {
+        background: #ede9fe;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -209,21 +257,15 @@ try:
 except Exception as e:
     st.error(f"Error al inicializar la API de Gemini: {e}")
 
-# 2. Configurar Drive desde secretos
-@st.cache_resource
-def conectar_drive():
+# 2. Configurar credenciales de Drive (Renovación dinámica para evitar fallos SSL)
+def obtener_servicio_drive():
     SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
     creds_dict = dict(st.secrets["gcp_service_account"])
     if "private_key" in creds_dict:
         creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
     creds = service_account.Credentials.from_service_account_info(
         creds_dict, scopes=SCOPES)
-    return build('drive', 'v3', credentials=creds)
-
-try:
-    drive_service = conectar_drive()
-except Exception as e:
-    st.error(f"Error al conectar con Drive: {e}")
+    return build('drive', 'v3', credentials=creds, cache_discovery=False)
 
 # --- CONTENIDO DE LA APP ---
 
@@ -323,12 +365,14 @@ if buscar_clicked:
             query_drive = " and ".join(condiciones_drive) + " and trashed = false"
             
             try:
+                drive_service = obtener_servicio_drive()
+                # Solicitamos campos con miniatura (thumbnailLink) e ícono
                 resultados = drive_service.files().list(
                     q=query_drive,
                     spaces='drive',
                     supportsAllDrives=True,
                     includeItemsFromAllDrives=True,
-                    fields='files(id, name, webViewLink)',
+                    fields='files(id, name, webViewLink, thumbnailLink, mimeType)',
                     pageSize=15
                 ).execute()
                 
@@ -342,7 +386,7 @@ if buscar_clicked:
                         spaces='drive',
                         supportsAllDrives=True,
                         includeItemsFromAllDrives=True,
-                        fields='files(id, name, webViewLink)',
+                        fields='files(id, name, webViewLink, thumbnailLink, mimeType)',
                         pageSize=15
                     ).execute()
                     archivos = resultados.get('files', [])
@@ -354,14 +398,24 @@ if buscar_clicked:
                 else:
                     st.success(f"¡Encontramos {len(archivos)} archivo(s)!")
                     for archivo in archivos:
+                        thumb = archivo.get('thumbnailLink', '')
+                        # Si existe miniatura se muestra la imagen previa, de lo contrario un ícono representativo
+                        if thumb:
+                            preview_html = f'<img src="{thumb}" class="asset-preview-img" alt="preview">'
+                        else:
+                            preview_html = '<div class="asset-icon-fallback">📄</div>'
+
                         st.markdown(f"""
                             <div class="asset-card">
-                                <span class="asset-title">📄 {archivo['name']}</span>
+                                <div class="asset-left-content">
+                                    {preview_html}
+                                    <span class="asset-title" title="{archivo['name']}">{archivo['name']}</span>
+                                </div>
                                 <a class="asset-link" href="{archivo['webViewLink']}" target="_blank">Abrir / Descargar ↗</a>
                             </div>
                         """, unsafe_allow_html=True)
                             
             except Exception as e:
-                st.error(f"Error al conectar con Drive: {e}")
+                st.error(f"Error al buscar en Drive: {e}")
     else:
         st.warning("Por favor, escribe algo para buscar.")
