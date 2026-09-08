@@ -30,6 +30,15 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
 
+    /* OCULTAR BARRA SUPERIOR DE STREAMLIT CLOUD (HEADER, GITHUB, SHARE) */
+    header[data-testid="stHeader"] {
+        display: none !important;
+    }
+
+    #MainMenu, footer {
+        visibility: hidden !important;
+    }
+
     /* 1. FONDO AMBIENTAL SUBTIL */
     .stApp {
         background: radial-gradient(circle at 15% 20%, #F5F3FF 0%, transparent 45%),
@@ -48,7 +57,7 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.85) !important;
         box-shadow: 0 20px 60px rgba(128, 35, 255, 0.07), 0 4px 20px rgba(0, 0, 0, 0.02) !important;
         padding: 45px 40px !important;
-        margin-top: 5rem !important;
+        margin-top: 2rem !important;
         margin-bottom: 4rem !important;
         max-width: 820px !important;
     }
