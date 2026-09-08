@@ -111,7 +111,11 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA DEFINITIVA (BORDE DEGRADADO SIN CORTES) */
+    /* 5. CAJA DE BÚSQUEDA DEFINITIVA Y VISIBLE */
+    .stTextInput {
+        width: 100% !important;
+    }
+
     .stTextInput > div {
         border-radius: 50px !important;
         background: transparent !important;
@@ -122,24 +126,21 @@ st.markdown("""
     .stTextInput div[data-baseweb="base-input"] {
         border-radius: 50px !important;
         background-color: #ffffff !important;
-        border: 1.5px solid transparent !important;
-        /* Gradiente aplicado directamente a través de background con clip de borde */
-        background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
-        background-origin: border-box !important;
-        background-clip: padding-box, border-box !important;
-        box-shadow: 0 4px 15px rgba(128, 35, 255, 0.1) !important;
+        border: 2px solid #ff6600 !important; /* Borde naranja NÍTIDO de marca */
+        box-shadow: 0 4px 16px rgba(255, 102, 0, 0.18), 0 2px 8px rgba(128, 35, 255, 0.12) !important;
         transition: all 0.3s ease !important;
     }
 
-    /* Resplandor suave al hacer foco */
+    /* Al hacer clic/escribir cambia suavemente a PÚRPURA ATOM con más brillo */
     .stTextInput div[data-baseweb="input"]:focus-within,
     .stTextInput div[data-baseweb="base-input"]:focus-within {
-        box-shadow: 0 6px 20px rgba(255, 102, 0, 0.2), 0 2px 10px rgba(128, 35, 255, 0.25) !important;
+        border-color: #8023ff !important;
+        box-shadow: 0 6px 22px rgba(128, 35, 255, 0.3), 0 2px 10px rgba(255, 102, 0, 0.2) !important;
     }
 
     .stTextInput input {
         border-radius: 50px !important;
-        padding: 12px 20px !important;
+        padding: 14px 24px !important;
         font-size: 15px !important;
         color: #0f172a !important;
         border: none !important;
@@ -148,7 +149,6 @@ st.markdown("""
         font-family: 'Inter', sans-serif !important;
         background: transparent !important;
     }
-
     /* 6. BOTÓN CTA CENTRADO */
     div.element-container:has(button) {
         display: flex !important;
