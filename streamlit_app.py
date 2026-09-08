@@ -331,10 +331,12 @@ st.markdown("""
 if buscar_clicked:
     if query_usuario:
         with st.spinner("⚡ Buscando assets..."):
+            query_limpia = query_usuario.replace('_', ' ').strip()
             prompt = f"""
-            Extrae las palabras clave para buscar archivos en Google Drive a partir del texto: '{query_usuario}'.
+            Extrae las palabras clave más relevantes para buscar en Google Drive a partir de: '{query_limpia}'.
+            Si hay términos como 'logo', 'atom', mantenlos intactos.
             Devuelve ÚNICAMENTE las palabras clave separadas por comas.
-            Ejemplo: 'gif,financiera,remarketing'
+            Ejemplo: 'logo,atom'
             """
             
             try:
@@ -345,10 +347,10 @@ if buscar_clicked:
                 palabras_raw = respuesta_gemini.text.strip()
                 palabras_clave = [p.strip() for p in palabras_raw.split(',') if p.strip()]
             except Exception:
-                palabras_clave = query_usuario.split()
+                palabras_clave = query_limpia.split()
 
             if not palabras_clave:
-                palabras_clave = query_usuario.split()
+                palabras_clave = query_limpia.split()
 
             condiciones_drive = [f"name contains '{p}'" for p in palabras_clave]
             query_drive = " and ".join(condiciones_drive) + " and trashed = false"
@@ -361,7 +363,7 @@ if buscar_clicked:
                     supportsAllDrives=True,
                     includeItemsFromAllDrives=True,
                     fields='files(id, name, webViewLink, mimeType)',
-                    pageSize=15
+                    pageSize=30
                 ).execute()
                 
                 archivos = resultados.get('files', [])
@@ -374,7 +376,7 @@ if buscar_clicked:
                         supportsAllDrives=True,
                         includeItemsFromAllDrives=True,
                         fields='files(id, name, webViewLink, mimeType)',
-                        pageSize=15
+                        pageSize=30
                     ).execute()
                     archivos = resultados.get('files', [])
 
@@ -383,18 +385,35 @@ if buscar_clicked:
                 if not archivos:
                     st.warning("No encontramos archivos que coincidan con esa descripción.")
                 else:
-                    st.success(f"¡Encontramos {len(archivos)} elemento(s)!")
-                    for archivo in archivos:
+                    # --- REORDENAMIENTO INTELIGENTE EN PYTHON ---
+                    # 1. Las carpetas (folders) primero.
+                    # 2. Las coincidencias de nombre que tengan más palabras del query van arriba.
+                    def calcular_relevancia(item):
+                        nombre_item = item.get('name', '').lower().replace('_', ' ')
+                        es_carpeta = 1 if 'folder' in item.get('mimeType', '') else 0
+                        
+                        # Conteo de coincidencia de palabras clave
+                        coincidencias = sum(1 for p in palabras_clave if p.lower() in nombre_item)
+                        
+                        # Prioridad: Es carpeta (x10) + número de palabras clave coincidentes
+                        puntuacion = (es_carpeta * 10) + coincidencias
+                        return puntuacion
+
+                    # Ordenamos de mayor a menor puntuación
+                    archivos_ordenados = sorted(archivos, key=calcular_relevancia, reverse=True)[:15]
+
+                    st.success(f"¡Encontramos {len(archivos_ordenados)} elemento(s) destacados!")
+                    
+                    for archivo in archivos_ordenados:
                         mime = archivo.get('mimeType', '')
                         nombre = archivo.get('name', '').lower()
                         
-                        # SVG vectorial oficial para PowerPoint / Presentations
+                        # SVG vectorial para PowerPoint
                         ppt_svg = '''<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="24" height="24" rx="5" fill="#D24726"/>
-                            <path d="M7 6H13.5C15.433 6 17 7.567 17 9.5C17 11.433 15.433 13 13.5 13H10V18H7V6ZM10 8.5V10.5H13.5C14.0523 10.5 14.5 10.0523 14.5 9.5C14.5 8.94772 14.0523 8.5 13.5 8.5H10Z" fill="white"/>
+                            <path d="M7 6H13.5C15.433 6 17 7.567 17 9.5C17 11.433 15.433 13 13.5 13H10V18H7V6ZM10 8.5V10.5H13.5C14.0523 10.5 14.5 10.0523 14.5 8.5H10Z" fill="white"/>
                         </svg>'''
 
-                        # Lógica de asignación de íconos claros y dinámicos
                         if 'folder' in mime:
                             icon_html = '<div class="asset-icon-fallback" style="background:#fef3c7; color:#d97706;">📁</div>'
                         elif 'presentation' in mime or 'powerpoint' in mime or 'ppt' in nombre:
