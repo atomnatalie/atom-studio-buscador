@@ -327,7 +327,7 @@ st.markdown("""
 st.markdown("""
     <div class="title-container">
         <h1 class="main-title">Atom Studio <span class="highlight-search">Search</span></h1>
-        <p class="subtitle-text">Escribe qué necesitas encontrar (ej. 'gif financiera remarketing', 'logo blanco', 'fotos navidad')</p>
+        <p class="subtitle-text">Escribe qué necesitas encontrar (ej. 'gif financiera remarketing', 'logo Atom', 'fotos Atom Fest 2025')</p>
         <div style="
             background: rgba(248, 250, 252, 0.85);
             border: 1px solid #e2e8f0;
