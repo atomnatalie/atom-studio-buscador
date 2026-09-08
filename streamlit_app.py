@@ -268,31 +268,31 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# CAJA DE BÚSQUEDA AISLADA CON ESTILO PROPIO
+# CAJA DE BÚSQUEDA CON SOMBRA PARALELA DIRECTA
 st.markdown("""
 <style>
-    .custom-search-container div[data-baseweb="input"],
-    .custom-search-container div[data-baseweb="base-input"] {
-        background-color: #ffffff !important;
-        border: 2px solid #ff6600 !important;
+    /* Forzamos la sombra paralela sobre los selectores exactos de Streamlit */
+    div[data-baseweb="input"] {
         border-radius: 50px !important;
-        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(255, 102, 0, 0.18) !important;
-        padding: 4px 8px !important;
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        /* Sombra paralela profunda (Drop Shadow) */
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(128, 35, 255, 0.15) !important;
         transition: all 0.3s ease !important;
     }
-    .custom-search-container div[data-baseweb="input"]:focus-within,
-    .custom-search-container div[data-baseweb="base-input"]:focus-within {
+    div[data-baseweb="input"]:focus-within {
         border-color: #8023ff !important;
-        box-shadow: 0 10px 25px rgba(128, 35, 255, 0.25) !important;
-        transform: translateY(-2px);
+        box-shadow: 0 15px 30px -5px rgba(255, 102, 0, 0.22), 0 10px 15px -5px rgba(128, 35, 255, 0.25) !important;
+        transform: translateY(-2px) !important;
+    }
+    .stTextInput input {
+        border-radius: 50px !important;
+        padding: 12px 20px !important;
     }
 </style>
-<div class="custom-search-container">
 """, unsafe_allow_html=True)
 
 query_usuario = st.text_input("", placeholder="🔍 Escribe tu búsqueda aquí...", label_visibility="collapsed")
-
-st.markdown("</div>", unsafe_allow_html=True)
 
 # Botón CTA Centrado
 st.markdown("<br>", unsafe_allow_html=True)
