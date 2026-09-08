@@ -104,7 +104,7 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA CON GRADIENTE */
+    /* 5. CAJA DE BÚSQUEDA CON GRADIENTE Y FOCO LIMPIO */
     .stTextInput > div {
         border-radius: 22px !important;
         padding: 2px !important;
@@ -112,20 +112,27 @@ st.markdown("""
         box-shadow: none !important;
     }
 
-    .stTextInput > div > div {
+    .stTextInput > div > div,
+    .stTextInput div[data-baseweb="input"],
+    .stTextInput div[data-baseweb="base-input"] {
         border-radius: 20px !important;
         background-color: rgba(255, 255, 255, 0.92) !important;
-        border: none !important;
-        box-shadow: none !important;
-    }
-
-    .stTextInput > div > div:focus-within {
         border: none !important;
         box-shadow: none !important;
         outline: none !important;
     }
 
-    .stTextInput > div > div > input {
+    /* ELIMINA LA RAYA Y SOMBRA AL HACER CLIC/ESCRIBIR */
+    .stTextInput > div > div:focus-within,
+    .stTextInput div[data-baseweb="input"]:focus-within,
+    .stTextInput div[data-baseweb="base-input"]:focus-within {
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        background-color: rgba(255, 255, 255, 0.98) !important;
+    }
+
+    .stTextInput input {
         border-radius: 20px !important;
         padding: 14px 20px !important;
         font-size: 15px !important;
@@ -137,7 +144,7 @@ st.markdown("""
         background: transparent !important;
     }
 
-    .stTextInput > div > div > input:focus {
+    .stTextInput input:focus {
         border: none !important;
         outline: none !important;
         box-shadow: none !important;
