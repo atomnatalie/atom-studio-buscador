@@ -111,7 +111,7 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA DEFINITIVA Y VISIBLE */
+    /* 5. CAJA DE BÚSQUEDA CON SOMBRA PARALELA ELEGANTE */
     .stTextInput {
         width: 100% !important;
     }
@@ -126,16 +126,18 @@ st.markdown("""
     .stTextInput div[data-baseweb="base-input"] {
         border-radius: 50px !important;
         background-color: #ffffff !important;
-        border: 2px solid #ff6600 !important; /* Borde naranja NÍTIDO de marca */
-        box-shadow: 0 4px 16px rgba(255, 102, 0, 0.18), 0 2px 8px rgba(128, 35, 255, 0.12) !important;
-        transition: all 0.3s ease !important;
+        border: 1px solid #e2e8f0 !important;
+        /* Sombra paralela multicapa (sombra suave + resplandor sutil) */
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 16px -6px rgba(128, 35, 255, 0.15) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
-    /* Al hacer clic/escribir cambia suavemente a PÚRPURA ATOM con más brillo */
+    /* Efecto al interactuar/escribir: la sombra se eleva y resalta */
     .stTextInput div[data-baseweb="input"]:focus-within,
     .stTextInput div[data-baseweb="base-input"]:focus-within {
         border-color: #8023ff !important;
-        box-shadow: 0 6px 22px rgba(128, 35, 255, 0.3), 0 2px 10px rgba(255, 102, 0, 0.2) !important;
+        box-shadow: 0 14px 30px -4px rgba(255, 102, 0, 0.2), 0 10px 20px -5px rgba(128, 35, 255, 0.25) !important;
+        transform: translateY(-2px) !important;
     }
 
     .stTextInput input {
