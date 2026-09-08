@@ -111,9 +111,9 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA CON BORDE DEGRADE Y RESPLANDOR */
+    /* 5. CAJA DE BÚSQUEDA CON MARCO DEGRADADO GRUESO Y HIGHLIGHT */
     .stTextInput > div {
-        border-radius: 28px !important;
+        border-radius: 30px !important;
         background: transparent !important;
         box-shadow: none !important;
         padding: 0 !important;
@@ -121,25 +121,26 @@ st.markdown("""
 
     .stTextInput div[data-baseweb="input"],
     .stTextInput div[data-baseweb="base-input"] {
-        border-radius: 28px !important;
+        border-radius: 30px !important;
         background-color: #ffffff !important;
-        border: 2px solid transparent !important;
+        /* Borde más grueso (3.5px) con degradado vibrante */
+        border: 3.5px solid transparent !important;
         background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
         background-origin: border-box !important;
         background-clip: padding-box, border-box !important;
-        box-shadow: 0 4px 20px rgba(128, 35, 255, 0.12), 0 2px 8px rgba(255, 102, 0, 0.12) !important;
+        box-shadow: 0 6px 20px rgba(255, 102, 0, 0.18), 0 2px 10px rgba(128, 35, 255, 0.15) !important;
         transition: all 0.3s ease !important;
     }
 
-    /* Efecto al hacer clic para escribir (alumbra más el degradado) */
+    /* Efecto al hacer clic para escribir */
     .stTextInput div[data-baseweb="input"]:focus-within,
     .stTextInput div[data-baseweb="base-input"]:focus-within {
-        box-shadow: 0 6px 25px rgba(255, 102, 0, 0.25), 0 2px 12px rgba(128, 35, 255, 0.3) !important;
-        transform: translateY(-1px);
+        box-shadow: 0 8px 28px rgba(255, 102, 0, 0.3), 0 4px 16px rgba(128, 35, 255, 0.35) !important;
+        transform: translateY(-2px);
     }
 
     .stTextInput input {
-        border-radius: 28px !important;
+        border-radius: 30px !important;
         padding: 14px 22px !important;
         font-size: 16px !important;
         color: #0f172a !important;
