@@ -313,20 +313,8 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Logo a la izquierda + Caja a la derecha
-col_logo, col_input = st.columns([0.7, 3.3], vertical_alignment="center")
-
-with col_logo:
-    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-    if os.path.exists("logo.png"):
-        st.image("logo.png", use_container_width=True)
-    else:
-        st.markdown("<h3 style='margin:0; color:#0f172a;'><b>ATOM</b></h3>", unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-with col_input:
-    query_usuario = st.text_input("", placeholder="Escribe tu búsqueda aquí...", label_visibility="collapsed")
-
+# Caja de búsqueda a ancho completo
+query_usuario = st.text_input("", placeholder="Escribe tu búsqueda aquí...", label_visibility="collapsed")
 # Botón CTA Centrado y Plano
 st.markdown("<br>", unsafe_allow_html=True)
 buscar_clicked = st.button("🔎 Buscar Materiales")
