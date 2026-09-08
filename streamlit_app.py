@@ -268,8 +268,31 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Caja de búsqueda a ancho completo
+# CAJA DE BÚSQUEDA AISLADA CON ESTILO PROPIO
+st.markdown("""
+<style>
+    .custom-search-container div[data-baseweb="input"],
+    .custom-search-container div[data-baseweb="base-input"] {
+        background-color: #ffffff !important;
+        border: 2px solid #ff6600 !important;
+        border-radius: 50px !important;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(255, 102, 0, 0.18) !important;
+        padding: 4px 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    .custom-search-container div[data-baseweb="input"]:focus-within,
+    .custom-search-container div[data-baseweb="base-input"]:focus-within {
+        border-color: #8023ff !important;
+        box-shadow: 0 10px 25px rgba(128, 35, 255, 0.25) !important;
+        transform: translateY(-2px);
+    }
+</style>
+<div class="custom-search-container">
+""", unsafe_allow_html=True)
+
 query_usuario = st.text_input("", placeholder="🔍 Escribe tu búsqueda aquí...", label_visibility="collapsed")
+
+st.markdown("</div>", unsafe_allow_html=True)
 
 # Botón CTA Centrado
 st.markdown("<br>", unsafe_allow_html=True)
