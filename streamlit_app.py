@@ -247,7 +247,7 @@ try:
 except Exception as e:
     st.error(f"Error al inicializar la API de Gemini: {e}")
 
-# 2. Configurar credenciales de Drive (Renovación dinámica para evitar fallos SSL)
+# 2. Configurar credenciales de Drive (Renovación dinámica)
 def obtener_servicio_drive():
     SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
     creds_dict = dict(st.secrets["gcp_service_account"])
@@ -327,8 +327,8 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Lógica y Resultados
-if buscar_clicked:
+# LÓGICA Y RESULTADOS (SOPORTA ENTER O CLIC EN BOTÓN)
+if buscar_clicked or query_usuario:
     if query_usuario:
         with st.spinner("⚡ Buscando assets..."):
             query_limpia = query_usuario.replace('_', ' ').strip()
@@ -386,20 +386,13 @@ if buscar_clicked:
                     st.warning("No encontramos archivos que coincidan con esa descripción.")
                 else:
                     # --- REORDENAMIENTO INTELIGENTE EN PYTHON ---
-                    # 1. Las carpetas (folders) primero.
-                    # 2. Las coincidencias de nombre que tengan más palabras del query van arriba.
                     def calcular_relevancia(item):
                         nombre_item = item.get('name', '').lower().replace('_', ' ')
                         es_carpeta = 1 if 'folder' in item.get('mimeType', '') else 0
-                        
-                        # Conteo de coincidencia de palabras clave
                         coincidencias = sum(1 for p in palabras_clave if p.lower() in nombre_item)
-                        
-                        # Prioridad: Es carpeta (x10) + número de palabras clave coincidentes
                         puntuacion = (es_carpeta * 10) + coincidencias
                         return puntuacion
 
-                    # Ordenamos de mayor a menor puntuación
                     archivos_ordenados = sorted(archivos, key=calcular_relevancia, reverse=True)[:15]
 
                     st.success(f"¡Encontramos {len(archivos_ordenados)} elemento(s) destacados!")
@@ -439,5 +432,3 @@ if buscar_clicked:
                             
             except Exception as e:
                 st.error(f"Error al buscar en Drive: {e}")
-    else:
-        st.warning("Por favor, escribe algo para buscar.")
