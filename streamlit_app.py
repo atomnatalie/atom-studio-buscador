@@ -174,12 +174,12 @@ st.markdown("""
         box-shadow: none !important;
     }
 
-    /* 7. TARJETAS DE RESULTADOS CON PREVIEW / THUMBNAIL */
+    /* 7. TARJETAS DE RESULTADOS CON PREVIEW VISIBLE */
     .asset-card {
         background: #ffffff;
         border: 1px solid rgba(226, 232, 240, 0.9);
         border-radius: 16px;
-        padding: 14px 18px;
+        padding: 12px 18px;
         margin-bottom: 12px;
         box-shadow: 0px 4px 12px rgba(15, 23, 42, 0.04);
         display: flex;
@@ -202,8 +202,8 @@ st.markdown("""
     }
 
     .asset-preview-img {
-        width: 52px;
-        height: 52px;
+        width: 50px;
+        height: 50px;
         border-radius: 10px;
         object-fit: cover;
         border: 1px solid #e2e8f0;
@@ -212,8 +212,8 @@ st.markdown("""
     }
 
     .asset-icon-fallback {
-        width: 52px;
-        height: 52px;
+        width: 50px;
+        height: 50px;
         border-radius: 10px;
         background: #f1f5f9;
         display: flex;
@@ -257,7 +257,7 @@ try:
 except Exception as e:
     st.error(f"Error al inicializar la API de Gemini: {e}")
 
-# 2. Configurar credenciales de Drive (Renovación dinámica para evitar fallos SSL)
+# 2. Configurar credenciales de Drive (Renovación dinámica)
 def obtener_servicio_drive():
     SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
     creds_dict = dict(st.secrets["gcp_service_account"])
@@ -360,25 +360,22 @@ if buscar_clicked:
             if not palabras_clave:
                 palabras_clave = query_usuario.split()
 
-            # Búsqueda AND en Drive
             condiciones_drive = [f"name contains '{p}'" for p in palabras_clave]
             query_drive = " and ".join(condiciones_drive) + " and trashed = false"
             
             try:
                 drive_service = obtener_servicio_drive()
-                # Solicitamos campos con miniatura (thumbnailLink) e ícono
                 resultados = drive_service.files().list(
                     q=query_drive,
                     spaces='drive',
                     supportsAllDrives=True,
                     includeItemsFromAllDrives=True,
-                    fields='files(id, name, webViewLink, thumbnailLink, mimeType)',
+                    fields='files(id, name, webViewLink, mimeType, thumbnailLink)',
                     pageSize=15
                 ).execute()
                 
                 archivos = resultados.get('files', [])
                 
-                # Búsqueda flexible OR si falla la primera
                 if not archivos and len(palabras_clave) > 1:
                     query_drive_flexible = f"({' or '.join(condiciones_drive)}) and trashed = false"
                     resultados = drive_service.files().list(
@@ -386,7 +383,7 @@ if buscar_clicked:
                         spaces='drive',
                         supportsAllDrives=True,
                         includeItemsFromAllDrives=True,
-                        fields='files(id, name, webViewLink, thumbnailLink, mimeType)',
+                        fields='files(id, name, webViewLink, mimeType, thumbnailLink)',
                         pageSize=15
                     ).execute()
                     archivos = resultados.get('files', [])
@@ -396,14 +393,19 @@ if buscar_clicked:
                 if not archivos:
                     st.warning("No encontramos archivos que coincidan con esa descripción.")
                 else:
-                    st.success(f"¡Encontramos {len(archivos)} archivo(s)!")
+                    st.success(f"¡Encontramos {len(archivos)} elemento(s)!")
                     for archivo in archivos:
-                        thumb = archivo.get('thumbnailLink', '')
-                        # Si existe miniatura se muestra la imagen previa, de lo contrario un ícono representativo
-                        if thumb:
-                            preview_html = f'<img src="{thumb}" class="asset-preview-img" alt="preview">'
+                        mime = archivo.get('mimeType', '')
+                        file_id = archivo.get('id', '')
+                        
+                        # Generador directo de miniaturas para Google Drive
+                        if 'folder' in mime:
+                            preview_html = '<div class="asset-icon-fallback" style="background:#fef3c7; color:#d97706;">📁</div>'
+                        elif 'image' in mime or 'pdf' in mime or 'presentation' in mime:
+                            thumb_url = f"https://drive.google.com/thumbnail?id={file_id}&sz=w200"
+                            preview_html = f'<img src="{thumb_url}" class="asset-preview-img" onerror="this.onerror=null; this.src=\'https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png\';">'
                         else:
-                            preview_html = '<div class="asset-icon-fallback">📄</div>'
+                            preview_html = '<div class="asset-icon-fallback" style="background:#e0e7ff; color:#4338ca;">📄</div>'
 
                         st.markdown(f"""
                             <div class="asset-card">
