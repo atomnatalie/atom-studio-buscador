@@ -174,7 +174,7 @@ st.markdown("""
         box-shadow: none !important;
     }
 
-    /* 7. TARJETAS DE RESULTADOS CON PREVIEW VISIBLE */
+    /* 7. TARJETAS DE RESULTADOS CON ÍCONOS */
     .asset-card {
         background: #ffffff;
         border: 1px solid rgba(226, 232, 240, 0.9);
@@ -201,20 +201,10 @@ st.markdown("""
         overflow: hidden;
     }
 
-    .asset-preview-img {
-        width: 50px;
-        height: 50px;
-        border-radius: 10px;
-        object-fit: cover;
-        border: 1px solid #e2e8f0;
-        background: #f8fafc;
-        flex-shrink: 0;
-    }
-
     .asset-icon-fallback {
-        width: 50px;
-        height: 50px;
-        border-radius: 10px;
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
         background: #f1f5f9;
         display: flex;
         align-items: center;
@@ -257,7 +247,7 @@ try:
 except Exception as e:
     st.error(f"Error al inicializar la API de Gemini: {e}")
 
-# 2. Configurar credenciales de Drive (Renovación dinámica)
+# 2. Configurar credenciales de Drive (Renovación dinámica para evitar fallos SSL)
 def obtener_servicio_drive():
     SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
     creds_dict = dict(st.secrets["gcp_service_account"])
@@ -370,7 +360,7 @@ if buscar_clicked:
                     spaces='drive',
                     supportsAllDrives=True,
                     includeItemsFromAllDrives=True,
-                    fields='files(id, name, webViewLink, mimeType, thumbnailLink)',
+                    fields='files(id, name, webViewLink, mimeType)',
                     pageSize=15
                 ).execute()
                 
@@ -383,7 +373,7 @@ if buscar_clicked:
                         spaces='drive',
                         supportsAllDrives=True,
                         includeItemsFromAllDrives=True,
-                        fields='files(id, name, webViewLink, mimeType, thumbnailLink)',
+                        fields='files(id, name, webViewLink, mimeType)',
                         pageSize=15
                     ).execute()
                     archivos = resultados.get('files', [])
@@ -396,21 +386,32 @@ if buscar_clicked:
                     st.success(f"¡Encontramos {len(archivos)} elemento(s)!")
                     for archivo in archivos:
                         mime = archivo.get('mimeType', '')
-                        file_id = archivo.get('id', '')
+                        nombre = archivo.get('name', '').lower()
                         
-                        # Generador directo de miniaturas para Google Drive
+                        # SVG vectorial oficial para PowerPoint / Presentations
+                        ppt_svg = '''<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="#D24726"/>
+                            <path d="M7 6H13.5C15.433 6 17 7.567 17 9.5C17 11.433 15.433 13 13.5 13H10V18H7V6ZM10 8.5V10.5H13.5C14.0523 10.5 14.5 10.0523 14.5 9.5C14.5 8.94772 14.0523 8.5 13.5 8.5H10Z" fill="white"/>
+                        </svg>'''
+
+                        # Lógica de asignación de íconos claros y dinámicos
                         if 'folder' in mime:
-                            preview_html = '<div class="asset-icon-fallback" style="background:#fef3c7; color:#d97706;">📁</div>'
-                        elif 'image' in mime or 'pdf' in mime or 'presentation' in mime:
-                            thumb_url = f"https://drive.google.com/thumbnail?id={file_id}&sz=w200"
-                            preview_html = f'<img src="{thumb_url}" class="asset-preview-img" onerror="this.onerror=null; this.src=\'https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png\';">'
+                            icon_html = '<div class="asset-icon-fallback" style="background:#fef3c7; color:#d97706;">📁</div>'
+                        elif 'presentation' in mime or 'powerpoint' in mime or 'ppt' in nombre:
+                            icon_html = f'<div class="asset-icon-fallback" style="background:#fff1f0;">{ppt_svg}</div>'
+                        elif 'image' in mime or 'png' in nombre or 'jpg' in nombre or 'jpeg' in nombre:
+                            icon_html = '<div class="asset-icon-fallback" style="background:#fce7f3; color:#db2777;">🖼️</div>'
+                        elif 'video' in mime or 'mp4' in nombre or 'mov' in nombre:
+                            icon_html = '<div class="asset-icon-fallback" style="background:#e0e7ff; color:#4338ca;">🎬</div>'
+                        elif 'pdf' in mime or 'pdf' in nombre:
+                            icon_html = '<div class="asset-icon-fallback" style="background:#fee2e2; color:#dc2626;">📕</div>'
                         else:
-                            preview_html = '<div class="asset-icon-fallback" style="background:#e0e7ff; color:#4338ca;">📄</div>'
+                            icon_html = '<div class="asset-icon-fallback" style="background:#f1f5f9; color:#475569;">📄</div>'
 
                         st.markdown(f"""
                             <div class="asset-card">
                                 <div class="asset-left-content">
-                                    {preview_html}
+                                    {icon_html}
                                     <span class="asset-title" title="{archivo['name']}">{archivo['name']}</span>
                                 </div>
                                 <a class="asset-link" href="{archivo['webViewLink']}" target="_blank">Abrir / Descargar ↗</a>
