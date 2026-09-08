@@ -111,37 +111,33 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA CON MARCO DEGRADADO GRUESO Y HIGHLIGHT */
+    /* 5. CAJA DE BÚSQUEDA CON MARCO DEGRADADO PERFECTO */
     .stTextInput > div {
+        background: linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
         border-radius: 30px !important;
-        background: transparent !important;
-        box-shadow: none !important;
-        padding: 0 !important;
+        padding: 3px !important; /* Grosor exacto del borde degradado */
+        box-shadow: 0 4px 18px rgba(255, 102, 0, 0.22), 0 2px 10px rgba(128, 35, 255, 0.2) !important;
+        transition: all 0.3s ease !important;
     }
 
     .stTextInput div[data-baseweb="input"],
     .stTextInput div[data-baseweb="base-input"] {
-        border-radius: 30px !important;
         background-color: #ffffff !important;
-        /* Borde más grueso (3.5px) con degradado vibrante */
-        border: 3.5px solid transparent !important;
-        background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
-        background-origin: border-box !important;
-        background-clip: padding-box, border-box !important;
-        box-shadow: 0 6px 20px rgba(255, 102, 0, 0.18), 0 2px 10px rgba(128, 35, 255, 0.15) !important;
-        transition: all 0.3s ease !important;
+        border-radius: 27px !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
     }
 
     /* Efecto al hacer clic para escribir */
-    .stTextInput div[data-baseweb="input"]:focus-within,
-    .stTextInput div[data-baseweb="base-input"]:focus-within {
-        box-shadow: 0 8px 28px rgba(255, 102, 0, 0.3), 0 4px 16px rgba(128, 35, 255, 0.35) !important;
-        transform: translateY(-2px);
+    .stTextInput > div:focus-within {
+        box-shadow: 0 6px 28px rgba(255, 102, 0, 0.35), 0 4px 16px rgba(128, 35, 255, 0.4) !important;
+        transform: translateY(-1px);
     }
 
     .stTextInput input {
-        border-radius: 30px !important;
-        padding: 14px 22px !important;
+        border-radius: 27px !important;
+        padding: 12px 20px !important;
         font-size: 16px !important;
         color: #0f172a !important;
         border: none !important;
