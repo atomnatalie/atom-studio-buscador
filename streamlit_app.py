@@ -1,4 +1,17 @@
 import streamlit as st
+st.set_page_config(
+    page_title="Atom Studio Search",
+    page_icon="🎨",
+    layout="centered"
+)
+
+# Inyectar metadatos para la vista previa de Slack/WhatsApp
+st.markdown("""
+    <head>
+        <meta property="og:title" content="Atom Studio Search" />
+        <meta property="og:description" content="Buscador inteligente de materiales y recursos creativos diseñados por Atom Studio para todas las áreas." />
+    </head>
+""", unsafe_allow_html=True)
 from google import genai
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
