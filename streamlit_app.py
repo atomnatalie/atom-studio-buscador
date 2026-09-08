@@ -109,13 +109,20 @@ st.markdown("""
         border-radius: 22px !important;
         padding: 2px !important;
         background: linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
-        box-shadow: 0px 4px 15px rgba(128, 35, 255, 0.12) !important;
+        box-shadow: none !important;
     }
 
     .stTextInput > div > div {
         border-radius: 20px !important;
         background-color: rgba(255, 255, 255, 0.92) !important;
         border: none !important;
+        box-shadow: none !important;
+    }
+
+    .stTextInput > div > div:focus-within {
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
     }
 
     .stTextInput > div > div > input {
@@ -124,15 +131,16 @@ st.markdown("""
         font-size: 15px !important;
         color: #1e293b !important;
         border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
         font-family: 'Inter', sans-serif !important;
         background: transparent !important;
     }
 
-    /* OCULTAR TEXTO "Press Enter to apply" */
-    div[data-testid="InputInstructions"], 
-    .stTextInput small,
-    .stTextInput div[data-baseweb="base-input"] + div {
-        display: none !important;
+    .stTextInput > div > div > input:focus {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
     }
 
     /* 6. BOTÓN CTA CENTRADO Y PLANO */
