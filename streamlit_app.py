@@ -276,11 +276,12 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Título y Subtítulo
+# Título, Subtítulo y Nota de Acceso
 st.markdown("""
     <div class="title-container">
         <h1 class="main-title">Atom Studio <span class="highlight-search">Search</span></h1>
         <p class="subtitle-text">Escribe qué necesitas encontrar (ej. 'gif financiera remarketing', 'logo blanco', 'fotos navidad')</p>
+        <p style="color: #8023ff; font-size: 0.82rem; font-weight: 500; margin-top: -0.5rem;">🔒 Recuerda iniciar sesión en Google con tu correo @atomchat.io para abrir los archivos.</p>
     </div>
 """, unsafe_allow_html=True)
 
