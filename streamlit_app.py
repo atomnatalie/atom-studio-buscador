@@ -281,7 +281,22 @@ st.markdown("""
     <div class="title-container">
         <h1 class="main-title">Atom Studio <span class="highlight-search">Search</span></h1>
         <p class="subtitle-text">Escribe qué necesitas encontrar (ej. 'gif financiera remarketing', 'logo blanco', 'fotos navidad')</p>
-        <p style="color: #8023ff; font-size: 0.82rem; font-weight: 500; margin-top: -0.5rem;">🔒 Recuerda iniciar sesión en Google con tu correo @atomchat.io para abrir los archivos.</p>
+        <div style="
+            background: rgba(248, 250, 252, 0.85);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        ">
+            <span style="font-size: 0.9rem;">🔒</span>
+            <span style="color: #475569; font-size: 0.83rem; font-weight: 500;">
+                Recuerda iniciar sesión en Google con tu correo <strong>@atomchat.io</strong> para abrir los archivos.
+            </span>
+        </div>
     </div>
 """, unsafe_allow_html=True)
 
