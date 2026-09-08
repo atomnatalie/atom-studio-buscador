@@ -111,7 +111,7 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. BORDE DEGRADADO FINO (1.5PX) CON SOMBRA PARALELA */
+    /* 5. BORDE DEGRADADO FINO CON SOMBRA PARALELA */
     [data-testid="stTextInputRootElement"] {
         background-color: #ffffff !important;
         border: 1.5px solid transparent !important;
@@ -138,6 +138,17 @@ st.markdown("""
     .stTextInput input {
         color: #0f172a !important;
         font-size: 15px !important;
+    }
+
+    /* OCULTAR EL MENSAJE 'PRESS ENTER TO APPLY' */
+    [data-testid="stInputInstructions"], 
+    .stTextInput small, 
+    div[data-baseweb="input"] + div {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
     }
 
     /* 6. BOTÓN CTA CENTRADO */
@@ -327,7 +338,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# LÓGICA Y RESULTADOS (SOPORTA ENTER O CLIC EN BOTÓN)
+# LÓGICA Y RESULTADOS
 if buscar_clicked or query_usuario:
     if query_usuario:
         with st.spinner("⚡ Buscando assets..."):
