@@ -111,33 +111,34 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA CON BORDE DEGRADADO FINO Y ELEGANTE */
+    /* 5. CAJA DE BÚSQUEDA DEFINITIVA (BORDE DEGRADADO SIN CORTES) */
     .stTextInput > div {
-        background: linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
         border-radius: 50px !important;
-        padding: 1.5px !important; /* Grosor fino de la línea */
-        overflow: hidden !important; /* Evita que se corten los bordes laterales */
-        box-shadow: 0 4px 15px rgba(128, 35, 255, 0.12) !important;
-        transition: all 0.3s ease !important;
+        background: transparent !important;
+        box-shadow: none !important;
     }
 
     .stTextInput div[data-baseweb="input"],
     .stTextInput div[data-baseweb="base-input"] {
+        border-radius: 50px !important;
         background-color: #ffffff !important;
-        border-radius: 48px !important;
-        border: none !important;
-        box-shadow: none !important;
-        outline: none !important;
-        overflow: hidden !important;
+        border: 1.5px solid transparent !important;
+        /* Gradiente aplicado directamente a través de background con clip de borde */
+        background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
+        background-origin: border-box !important;
+        background-clip: padding-box, border-box !important;
+        box-shadow: 0 4px 15px rgba(128, 35, 255, 0.1) !important;
+        transition: all 0.3s ease !important;
     }
 
-    /* Resplandor al hacer foco */
-    .stTextInput > div:focus-within {
-        box-shadow: 0 6px 20px rgba(255, 102, 0, 0.25), 0 2px 10px rgba(128, 35, 255, 0.2) !important;
+    /* Resplandor suave al hacer foco */
+    .stTextInput div[data-baseweb="input"]:focus-within,
+    .stTextInput div[data-baseweb="base-input"]:focus-within {
+        box-shadow: 0 6px 20px rgba(255, 102, 0, 0.2), 0 2px 10px rgba(128, 35, 255, 0.25) !important;
     }
 
     .stTextInput input {
-        border-radius: 48px !important;
+        border-radius: 50px !important;
         padding: 12px 20px !important;
         font-size: 15px !important;
         color: #0f172a !important;
@@ -145,7 +146,7 @@ st.markdown("""
         outline: none !important;
         box-shadow: none !important;
         font-family: 'Inter', sans-serif !important;
-        background: #ffffff !important;
+        background: transparent !important;
     }
 
     /* 6. BOTÓN CTA CENTRADO */
