@@ -111,25 +111,29 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. SOMBRA PARALELA Y BORDE DESTACADO PARA LA CAJA DE BÚSQUEDA */
-    .st-key-search_input div[data-baseweb="input"],
-    .st-key-search_input div[data-baseweb="base-input"] {
+    /* 5. SELECTOR NATIVO DEFINITIVO PARA LA CAJA DE BÚSQUEDA (STREAMLIT CLOUD) */
+    [data-testid="stTextInputRootElement"] {
         background-color: #ffffff !important;
         border: 2px solid #ff6600 !important;
         border-radius: 50px !important;
-        box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(255, 102, 0, 0.25) !important;
-        padding: 4px 10px !important;
+        box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(255, 102, 0, 0.22) !important;
         transition: all 0.3s ease !important;
+        padding: 2px 8px !important;
     }
 
-    .st-key-search_input div[data-baseweb="input"]:focus-within,
-    .st-key-search_input div[data-baseweb="base-input"]:focus-within {
+    [data-testid="stTextInputRootElement"]:focus-within {
         border-color: #8023ff !important;
         box-shadow: 0 14px 30px -4px rgba(128, 35, 255, 0.3), 0 6px 16px -2px rgba(255, 102, 0, 0.25) !important;
         transform: translateY(-2px) !important;
     }
 
-    .st-key-search_input input {
+    [data-testid="stTextInputRootElement"] > div {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .stTextInput input {
         color: #0f172a !important;
         font-size: 15px !important;
     }
@@ -251,8 +255,8 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# CAMPO DE BÚSQUEDA A ANCHO COMPLETO VINCULADO AL KEY
-query_usuario = st.text_input("", placeholder="🔍 Escribe tu búsqueda aquí...", label_visibility="collapsed", key="search_input")
+# CAMPO DE BÚSQUEDA A ANCHO COMPLETO
+query_usuario = st.text_input("", placeholder="🔍 Escribe tu búsqueda aquí...", label_visibility="collapsed")
 
 # Botón CTA Centrado
 st.markdown("<br>", unsafe_allow_html=True)
