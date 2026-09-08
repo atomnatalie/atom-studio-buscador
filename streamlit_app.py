@@ -4,7 +4,7 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import os
 
-# --- CONFIGURACIÓN DE PÁGINA Y METADATOS ---
+# --- CONFIGURACIÓN ÚNICA DE PÁGINA Y METADATOS ---
 st.set_page_config(
     page_title="Atom Studio Search",
     page_icon="🎨",
@@ -111,46 +111,29 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA CON SOMBRA PARALELA ELEGANTE */
-    .stTextInput {
-        width: 100% !important;
-    }
-
-    .stTextInput > div {
-        border-radius: 50px !important;
-        background: transparent !important;
-        box-shadow: none !important;
-    }
-
-    .stTextInput div[data-baseweb="input"],
-    .stTextInput div[data-baseweb="base-input"] {
-        border-radius: 50px !important;
+    /* 5. SOMBRA PARALELA Y BORDE DESTACADO PARA LA CAJA DE BÚSQUEDA */
+    .st-key-search_input div[data-baseweb="input"],
+    .st-key-search_input div[data-baseweb="base-input"] {
         background-color: #ffffff !important;
-        border: 1px solid #e2e8f0 !important;
-        /* Sombra paralela multicapa (sombra suave + resplandor sutil) */
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 16px -6px rgba(128, 35, 255, 0.15) !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        border: 2px solid #ff6600 !important;
+        border-radius: 50px !important;
+        box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(255, 102, 0, 0.25) !important;
+        padding: 4px 10px !important;
+        transition: all 0.3s ease !important;
     }
 
-    /* Efecto al interactuar/escribir: la sombra se eleva y resalta */
-    .stTextInput div[data-baseweb="input"]:focus-within,
-    .stTextInput div[data-baseweb="base-input"]:focus-within {
+    .st-key-search_input div[data-baseweb="input"]:focus-within,
+    .st-key-search_input div[data-baseweb="base-input"]:focus-within {
         border-color: #8023ff !important;
-        box-shadow: 0 14px 30px -4px rgba(255, 102, 0, 0.2), 0 10px 20px -5px rgba(128, 35, 255, 0.25) !important;
+        box-shadow: 0 14px 30px -4px rgba(128, 35, 255, 0.3), 0 6px 16px -2px rgba(255, 102, 0, 0.25) !important;
         transform: translateY(-2px) !important;
     }
 
-    .stTextInput input {
-        border-radius: 50px !important;
-        padding: 14px 24px !important;
-        font-size: 15px !important;
+    .st-key-search_input input {
         color: #0f172a !important;
-        border: none !important;
-        outline: none !important;
-        box-shadow: none !important;
-        font-family: 'Inter', sans-serif !important;
-        background: transparent !important;
+        font-size: 15px !important;
     }
+
     /* 6. BOTÓN CTA CENTRADO */
     div.element-container:has(button) {
         display: flex !important;
@@ -268,31 +251,8 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# CAJA DE BÚSQUEDA CON SOMBRA PARALELA DIRECTA
-st.markdown("""
-<style>
-    /* Forzamos la sombra paralela sobre los selectores exactos de Streamlit */
-    div[data-baseweb="input"] {
-        border-radius: 50px !important;
-        background-color: #ffffff !important;
-        border: 1px solid #e2e8f0 !important;
-        /* Sombra paralela profunda (Drop Shadow) */
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(128, 35, 255, 0.15) !important;
-        transition: all 0.3s ease !important;
-    }
-    div[data-baseweb="input"]:focus-within {
-        border-color: #8023ff !important;
-        box-shadow: 0 15px 30px -5px rgba(255, 102, 0, 0.22), 0 10px 15px -5px rgba(128, 35, 255, 0.25) !important;
-        transform: translateY(-2px) !important;
-    }
-    .stTextInput input {
-        border-radius: 50px !important;
-        padding: 12px 20px !important;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-query_usuario = st.text_input("", placeholder="🔍 Escribe tu búsqueda aquí...", label_visibility="collapsed")
+# CAMPO DE BÚSQUEDA A ANCHO COMPLETO VINCULADO AL KEY
+query_usuario = st.text_input("", placeholder="🔍 Escribe tu búsqueda aquí...", label_visibility="collapsed", key="search_input")
 
 # Botón CTA Centrado
 st.markdown("<br>", unsafe_allow_html=True)
