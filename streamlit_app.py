@@ -111,19 +111,22 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. SELECTOR NATIVO DEFINITIVO PARA LA CAJA DE BÚSQUEDA (STREAMLIT CLOUD) */
+    /* 5. BORDE DEGRADADO FINO (1.5PX) CON SOMBRA PARALELA */
     [data-testid="stTextInputRootElement"] {
         background-color: #ffffff !important;
-        border: 2px solid #ff6600 !important;
+        border: 1.5px solid transparent !important;
+        background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
+        background-origin: border-box !important;
+        background-clip: padding-box, border-box !important;
         border-radius: 50px !important;
-        box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(255, 102, 0, 0.22) !important;
+        box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(128, 35, 255, 0.18) !important;
         transition: all 0.3s ease !important;
         padding: 2px 8px !important;
     }
 
+    /* Efecto al hacer clic/escribir: resalta la sombra y el degradado */
     [data-testid="stTextInputRootElement"]:focus-within {
-        border-color: #8023ff !important;
-        box-shadow: 0 14px 30px -4px rgba(128, 35, 255, 0.3), 0 6px 16px -2px rgba(255, 102, 0, 0.25) !important;
+        box-shadow: 0 14px 30px -4px rgba(255, 102, 0, 0.25), 0 6px 18px -2px rgba(128, 35, 255, 0.3) !important;
         transform: translateY(-2px) !important;
     }
 
