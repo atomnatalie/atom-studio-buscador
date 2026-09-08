@@ -104,37 +104,35 @@ st.markdown("""
         font-weight: 400;
     }
 
-    /* 5. CAJA DE BÚSQUEDA CON GRADIENTE Y FOCO LIMPIO */
+    /* 5. CAJA DE BÚSQUEDA SIN SUBRAYADO */
     .stTextInput > div {
         border-radius: 22px !important;
-        padding: 2px !important;
-        background: linear-gradient(135deg, #ff6600 0%, #8023ff 100%) !important;
+        padding: 0 !important;
+        background: transparent !important;
         box-shadow: none !important;
     }
 
-    .stTextInput > div > div,
     .stTextInput div[data-baseweb="input"],
     .stTextInput div[data-baseweb="base-input"] {
         border-radius: 20px !important;
-        background-color: rgba(255, 255, 255, 0.92) !important;
-        border: none !important;
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        border: 2px solid #8023ff !important;
         box-shadow: none !important;
         outline: none !important;
+        transition: all 0.2s ease !important;
     }
 
-    /* ELIMINA LA RAYA Y SOMBRA AL HACER CLIC/ESCRIBIR */
-    .stTextInput > div > div:focus-within,
     .stTextInput div[data-baseweb="input"]:focus-within,
     .stTextInput div[data-baseweb="base-input"]:focus-within {
-        border: none !important;
+        border: 2px solid #ff6600 !important;
         box-shadow: none !important;
         outline: none !important;
-        background-color: rgba(255, 255, 255, 0.98) !important;
+        background-color: #ffffff !important;
     }
 
     .stTextInput input {
         border-radius: 20px !important;
-        padding: 14px 20px !important;
+        padding: 12px 20px !important;
         font-size: 15px !important;
         color: #1e293b !important;
         border: none !important;
